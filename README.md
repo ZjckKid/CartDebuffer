@@ -1,7 +1,7 @@
 # CartDebuffer
 
-A plugin is tested at **Purpur 1.21.11**. But, it may work from 
-Paper 1.21, to Paper 1.21.11 (Purpur too) 
+Tested on **Purpur 1.21.11**.
+Expected to work on **Paper/Purpur 1.21–1.21.11**.
 
 That plugin modifies the damage players receive
 from **TNT Minecart** explosions. It allows you to test 
@@ -159,8 +159,6 @@ selected mode persists across server restarts.
    it automatically).
 
 ---
-
-
 
 ## 6. Building
 
