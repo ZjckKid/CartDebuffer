@@ -1,0 +1,106 @@
+# =====================================================================
+#  CartDebuffer - Configuration
+#  This plugin adjusts the damage players receive from TNT Minecart explosions.
+#  There are 4 available operation modes.
+#  The active mode is selected in "active-mode". You can test modes
+#  live using the following commands:
+#     /cartdebuff mode <name>
+#     /cartdebuff reload
+# =====================================================================
+
+# General settings
+settings:
+  # Global debug mode: logs detailed information about every
+  # damage recalculation (old value -> new value, mode, distance)
+  debug: false
+
+  # Whether to notify players with the cartdebuffer.admin permission
+  # in chat whenever the plugin is triggered
+  notify-admins-in-chat: false
+
+  # Whether modifications should only apply to players (true)
+  # or to all entities, including mobs (false)
+  only-players: true
+
+  # Worlds where the plugin is disabled
+  disabled-worlds: []
+
+# =====================================================================
+# Player damage from TNT Minecart explosions
+# =====================================================================
+entity-damage:
+  # Enables or disables damage processing entirely.
+  # When disabled, vanilla behavior is restored with no plugin modifications.
+  enabled: true
+
+  # Active mode. See available options below under "modes"
+  active-mode: "distance-falloff"
+
+  modes:
+
+    # --- MODE 1: multiplier ---------------------------------------------
+    # Simply multiplies the incoming (vanilla) damage by a factor.
+    # final = incoming_damage * multiplier
+    multiplier:
+      multiplier: 0.5
+      # Minimum and maximum damage after multiplication
+      # (prevents extreme values)
+      min-damage: 0.0
+      max-damage: 20.0
+
+    # --- MODE 2: fixed damage -------------------------------------------
+    # Any damage from a TNT Minecart explosion is replaced with
+    # a fixed value, regardless of distance, explosion power, etc.
+    fixed:
+      damage: 6.0
+
+    # --- MODE 3: fixed damage with distance & obstacle falloff ----------
+    # Uses a fixed base damage value, but:
+    #  - decreases proportionally with the player's distance
+    #    from the explosion center
+    #  - is further reduced if solid blocks exist between
+    #    the player and the explosion center
+    #    (ray tracing counts opaque blocks along the line)
+    distance-falloff:
+      # Base (maximum, at the explosion center) damage
+      base-damage: 10.0
+      # Radius at which damage reaches 0
+      # (outside this radius, damage is 0)
+      falloff-radius: 8.0
+      # Falloff curve: linear / quadratic / exponential
+      falloff-curve: "quadratic"
+      # Percentage of base-damage removed for EACH
+      # opaque block between the explosion center and the player
+      damage-reduction-per-block: 0.15
+      # Maximum number of blocks checked
+      # (prevents expensive ray casts through thick walls)
+      max-blocks-checked: 12
+      # Minimum possible damage if the explosion still
+      # reaches the player (0 = damage may become 0)
+      min-damage: 0.0
+
+    # --- MODE 4: stepped distance zones ---------------------------------
+    # Instead of a smooth curve, uses fixed damage values
+    # for predefined distance zones.
+    stepped-zones:
+      zones:
+        - max-distance: 2.0
+          damage: 12.0
+        - max-distance: 4.0
+          damage: 7.0
+        - max-distance: 6.0
+          damage: 3.0
+        - max-distance: 999.0
+          damage: 0.0
+
+# =====================================================================
+# Messages shown to players/admins (supports MiniMessage,
+# e.g. <red>, <green>, <bold>, etc.)
+# =====================================================================
+messages:
+  reload-success: "<green>CartDebuffer: configuration reloaded.</green>"
+  mode-changed: "<green>Mode changed to <yellow>%mode%</yellow>.</green>"
+  mode-unknown: "<red>Unknown mode '%mode%'.</red>"
+  no-permission: "<red>You do not have permission to use this command.</red>"
+  invalid-usage: "<red>Invalid usage. /cartdebuff reload | mode <name> | info | toggle</red>"
+  toggled: "<green>Plugin is now: <yellow>%state%</yellow>.</green>"

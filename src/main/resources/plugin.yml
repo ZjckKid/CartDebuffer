@@ -1,0 +1,25 @@
+name: CartDebuffer
+version: '1.0'
+main: eu.zjck.cartDebuffer.CartDebuffer
+api-version: '1.21'
+author: zjck
+description: TNT Minecart damage adjustment with multiple modes of operation
+website: https://zjck.eu/
+
+commands:
+  cartdebuff:
+    description: CartDebuffer management
+    usage: |
+      /cartdebuff reload
+      /cartdebuff mode <mode_title>
+      /cartdebuff info
+      /cartdebuff toggle
+    permission: cartdebuffer.admin
+    permission-message: You do not have permission to use this command.
+    aliases: [cdb, cartdebuffer]
+
+permissions:
+  cartdebuffer.admin:
+    description: Allows you to manage the CartDebuffer plugin
+    default: op
+
